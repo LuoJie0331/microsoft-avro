@@ -54,7 +54,7 @@ namespace Microsoft.Hadoop.Avro.Schema
         /// <returns>Schema internal representation as a tree of nodes.</returns>
         /// <exception cref="System.ArgumentException">Thrown when <paramref name="schema"/> is null or empty.</exception>
         /// <exception cref="System.Runtime.Serialization.SerializationException">Thrown when <paramref name="schema"/> is invalid schema.</exception>
-        public TypeSchema BuildSchema(string schema)
+        public TypeSchema BuildSchema(string schema, Dictionary<string, NamedSchema> namedSchemas = null)
         {
             if (string.IsNullOrEmpty(schema))
             {
@@ -67,8 +67,7 @@ namespace Microsoft.Hadoop.Avro.Schema
                 throw new SerializationException(
                     string.Format(CultureInfo.InvariantCulture, "'{0}' is invalid JSON.", schema));
             }
-
-            return this.Parse(token, null, new Dictionary<string, NamedSchema>());
+            return this.Parse(token, null, namedSchemas ?? new Dictionary<string, NamedSchema>());
         }
 
         /// <summary>

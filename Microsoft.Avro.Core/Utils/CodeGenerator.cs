@@ -47,7 +47,7 @@ namespace Microsoft.Hadoop.Avro.Utils
         /// </summary>
         /// <param name="jsonSchema">The schema.</param>
         /// <returns>A list of schemas that can be used for code generation.</returns>
-        public static IEnumerable<TypeSchema> ResolveCodeGeneratingSchemas(string jsonSchema)
+        public static IEnumerable<TypeSchema> ResolveCodeGeneratingSchemas(string jsonSchema, Dictionary<string, NamedSchema> namedSchemas = null)
         {
             if (string.IsNullOrEmpty(jsonSchema))
             {
@@ -55,7 +55,7 @@ namespace Microsoft.Hadoop.Avro.Utils
                     string.Format(CultureInfo.InvariantCulture, "Empty schema can not be used for code generation."));
             }
 
-            var rootSchema = new JsonSchemaBuilder().BuildSchema(Utilities.RemoveComments(jsonSchema));
+            var rootSchema = new JsonSchemaBuilder().BuildSchema(Utilities.RemoveComments(jsonSchema), namedSchemas);
             return ResolveCodeGeneratingSchemas(rootSchema);
         }
 

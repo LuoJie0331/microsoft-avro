@@ -35,11 +35,16 @@ namespace Microsoft.Hadoop.Avro.Tools
 
             try
             {
-                IEnumerable<TypeSchema> schemas =
-                    configuration.JsonSchemas.SelectMany(CodeGenerator.ResolveCodeGeneratingSchemas)
-                        .GroupBy(t => t.ToString())
-                        .Select(g => g.First())
-                        .ToList();
+                Dictionary<string, NamedSchema> namedSchemas = new Dictionary<string, NamedSchema>();
+                foreach (var item in configuration.JsonSchemas)
+                {
+                    foreach (RecordSchema schema in CodeGenerator.ResolveCodeGeneratingSchemas(item, namedSchemas))
+                    {
+                        namedSchemas[schema.FullName] = schema;
+                    }
+                }
+
+                var schemas = namedSchemas.Values.ToList();
 
                 if (schemas.Any())
                 {
